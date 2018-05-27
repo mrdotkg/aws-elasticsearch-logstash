@@ -1,0 +1,20 @@
+# Run configuration for logstash service
+version: '3'
+
+services:
+  logstash:
+    build:
+      args:
+        ELK_VERSION: $ELK_VERSION
+      context: dkr-logstash/
+    container_name: logstash
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    image: logstash-$ELK_VERSION
+    ports:
+      - "5000:5000/tcp"
+      - "12202:12202/udp"
+    volumes:
+      - ./dkr-logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./dkr-logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./dkr-logstash/patterns:/usr/share/logstash/patterns:cached
